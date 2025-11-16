@@ -15,25 +15,6 @@
     </div>
   </div>
   
-  <!-- Corazones flotantes -->
-  <div class="floating-hearts">
-    <!-- Se generarán dinámicamente con JavaScript -->
-  </div>
-  
-  <!-- Decoraciones de esquina -->
-  <div class="corner-decoration top-left">
-    <i class="fa-solid fa-heart"></i>
-  </div>
-  <div class="corner-decoration top-right">
-    <i class="fa-solid fa-star"></i>
-  </div>
-  <div class="corner-decoration bottom-left">
-    <i class="fa-solid fa-gift"></i>
-  </div>
-  <div class="corner-decoration bottom-right">
-    <i class="fa-solid fa-cake-candles"></i>
-  </div>
-  
   <!-- Contenido principal del Hero -->
   <div class="hero-content ms-5">
     <h1 class="hero-title">¡Feliz Cumpleaños!</h1>
@@ -186,6 +167,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+
+  .hero-content.ms-5 {
+    margin-left: 0 !important;
   }
 
   /* Decoración flotante de corazones */
@@ -426,16 +411,24 @@
   }
 
   @media (max-width: 768px) {
+    .hero-content {
+      padding: 30px 20px;
+    }
+
     .hero-title {
       font-size: 2.5rem;
+      margin-bottom: 15px;
     }
     
     .hero-subtitle {
       font-size: 1.5rem;
+      margin-bottom: 20px;
     }
     
     .hero-message {
       font-size: 1rem;
+      margin-bottom: 30px;
+      padding: 0 10px;
     }
     
     .hero-btn {
@@ -462,16 +455,54 @@
   }
 
   @media (max-width: 480px) {
+    .hero-content {
+      padding: 40px 16px;
+    }
+
     .hero-title {
       font-size: 2rem;
+      margin-bottom: 12px;
     }
     
     .hero-subtitle {
       font-size: 1.2rem;
+      margin-bottom: 16px;
     }
     
     .hero-message {
       font-size: 0.9rem;
+      margin-bottom: 25px;
+      padding: 0 8px;
+      line-height: 1.6;
+    }
+
+    .hero-btn {
+      padding: 12px 28px;
+      font-size: 1rem;
+    }
+
+    .corner-decoration {
+      font-size: 1.5rem;
+    }
+
+    .corner-decoration.top-left,
+    .corner-decoration.top-right {
+      top: 15px;
+    }
+
+    .corner-decoration.top-left,
+    .corner-decoration.bottom-left {
+      left: 15px;
+    }
+
+    .corner-decoration.top-right,
+    .corner-decoration.bottom-right {
+      right: 15px;
+    }
+
+    .corner-decoration.bottom-left,
+    .corner-decoration.bottom-right {
+      bottom: 15px;
     }
   }
 </style>
@@ -559,11 +590,11 @@
 
   // Scroll suave a la siguiente sección
   function scrollToNext() {
-    const nextSection = document.querySelector('#main-content')?.nextElementSibling;
-    if (nextSection) {
-      nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const gallerySection = document.querySelector('#galeria');
+    if (gallerySection) {
+      gallerySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
-      // Si no hay siguiente sección, scroll al final de la página
+      // Si no hay galería, scroll al final de la página
       window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
     }
   }

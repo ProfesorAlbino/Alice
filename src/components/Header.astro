@@ -156,14 +156,53 @@ import ButtonDarkMode from "./ButtonDarkMode.astro"
     }
 
     @media (max-width: 991px) {
+        .navbar {
+            padding: 0.75rem 1rem;
+        }
+
+        .navbar-brand span {
+            font-size: 1.1rem;
+        }
+
+        .navbar-logo {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
         .navbar-collapse {
             margin-top: 1rem;
             padding-top: 1rem;
+            padding-bottom: 0.5rem;
             border-top: 1px solid rgba(255, 107, 157, 0.2);
         }
 
         .nav-link {
-            padding: 0.5rem 0 !important;
+            padding: 0.75rem 0 !important;
+            margin: 0;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .navbar {
+            padding: 0.5rem 12px;
+        }
+
+        .navbar-brand span {
+            font-size: 1rem;
+        }
+
+        .navbar-logo {
+            font-size: 1.3rem;
+            margin-right: 0.4rem;
+        }
+
+        .container-fluid {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .navbar-toggler {
+            padding: 0.2rem 0.4rem;
         }
     }
 </style>

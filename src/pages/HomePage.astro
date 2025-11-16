@@ -1,6 +1,7 @@
 ---
 // Importaciones y configuración
 import HeroSection from "../components/HeroSection.astro";
+import GallerySection from "../components/GallerySection.astro"
 ---
 
 <div class="p-0" style="width: 100%; margin: 0; padding: 0;">
@@ -31,6 +32,7 @@ import HeroSection from "../components/HeroSection.astro";
     <!-- Contenido principal -->
     <div id="main-content">
       <HeroSection/>
+      <GallerySection/>
     </div>
   </section>
 </div>
@@ -348,8 +350,13 @@ import HeroSection from "../components/HeroSection.astro";
 
   /* Responsive */
   @media (max-width: 768px) {
+    .loading-content {
+      margin-top: 12rem;
+    }
+
     .loading-text {
       font-size: 2rem;
+      margin-bottom: 15px;
     }
 
     .loading-subtext {
@@ -359,6 +366,7 @@ import HeroSection from "../components/HeroSection.astro";
     .heart-container {
       width: 150px;
       height: 150px;
+      margin-bottom: 25px;
     }
 
     .main-heart,
@@ -374,6 +382,44 @@ import HeroSection from "../components/HeroSection.astro";
 
     .main-heart::after {
       left: 75px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .loading-content {
+      margin-top: 10rem;
+      padding: 0 16px;
+    }
+
+    .loading-text {
+      font-size: 1.75rem;
+      margin-bottom: 12px;
+    }
+
+    .loading-subtext {
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+    }
+
+    .heart-container {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 20px;
+    }
+
+    .main-heart,
+    .main-heart::before,
+    .main-heart::after {
+      width: 120px;
+      height: 120px;
+    }
+
+    .main-heart::before {
+      top: -60px;
+    }
+
+    .main-heart::after {
+      left: 60px;
     }
   }
 </style>

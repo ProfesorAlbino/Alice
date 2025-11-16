@@ -1,0 +1,946 @@
+---
+// Gallery Section Component
+---
+
+<section id="galeria" class="gallery-section">
+  <!-- Botón de regreso -->
+  <button class="back-button" id="backBtn">
+    ← Volver a Álbumes
+  </button>
+
+  <!-- Decoraciones flotantes -->
+  <div class="floating-decoration" style="top: 10%; left: 5%; font-size: 40px;">🌸</div>
+  <div class="floating-decoration" style="top: 20%; right: 8%; font-size: 35px; animation-delay: -2s;">💖</div>
+  <div class="floating-decoration" style="bottom: 15%; left: 10%; font-size: 45px; animation-delay: -4s;">🌺</div>
+  <div class="floating-decoration" style="bottom: 25%; right: 5%; font-size: 38px; animation-delay: -3s;">💝</div>
+
+  <!-- Header -->
+  <div class="gallery-header">
+    <h1 class="gallery-title">📸 Galería de Recuerdos</h1>
+    <p class="gallery-subtitle">Momentos inolvidables junto a ti</p>
+  </div>
+
+  <div class="gallery-container">
+    <!-- Vista de Álbumes -->
+    <div class="albums-view" id="albumsView">
+      <div class="albums-grid" id="albumsGrid">
+        <!-- Los álbumes se generarán dinámicamente -->
+      </div>
+    </div>
+
+    <!-- Vista de Fotos -->
+    <div class="photos-view" id="photosView">
+      <!-- Dedicatoria -->
+      <div class="dedication-card">
+        <h2 class="dedication-title" id="dedicationTitle">💝 Con todo nuestro amor</h2>
+        <p class="dedication-text" id="dedicationText">
+          <!-- El texto se llenará dinámicamente -->
+        </p>
+        <div class="dedication-signature" id="dedicationSignature">
+          <!-- La firma se llenará dinámicamente -->
+        </div>
+      </div>
+
+      <!-- Grid de fotos -->
+      <div class="photos-grid" id="photosGrid">
+        <!-- Las fotos se generarán dinámicamente -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de imagen -->
+  <div class="photo-modal" id="photoModal">
+    <div class="modal-content">
+      <button class="modal-close">✕</button>
+      <img id="modalImage" src="" alt="Foto">
+    </div>
+  </div>
+</section>
+
+<style>
+  .gallery-section {
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    background: var(--bg-primary);
+  }
+
+  body.dark-mode .gallery-section {
+    background: var(--bg-dark);
+  }
+
+  /* Header de la galería */
+  .gallery-header {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-lavender) 100%);
+    padding: 100px 20px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gallery-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: moveBackground 20s linear infinite;
+  }
+
+  @keyframes moveBackground {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+  }
+
+  .gallery-title {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 900;
+    color: var(--text-light);
+    margin-bottom: 15px;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 2;
+  }
+
+  .gallery-subtitle {
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
+    color: var(--text-light);
+    font-weight: 300;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Botón de regreso */
+  .back-button {
+    position: fixed;
+    top: 100px;
+    left: 20px;
+    z-index: 1000;
+    background: var(--color-gold);
+    color: var(--text-primary);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s ease;
+    display: none;
+    font-size: 1rem;
+  }
+
+  .back-button.show {
+    display: block;
+  }
+
+  .back-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(255, 215, 0, 0.4);
+  }
+
+  /* Contenedor principal */
+  .gallery-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px 20px;
+  }
+
+  /* Vista de álbumes */
+  .albums-view {
+    display: block;
+  }
+
+  .albums-view.hidden {
+    display: none;
+  }
+
+  .albums-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 35px;
+    margin-top: 40px;
+  }
+
+  /* Card de álbum */
+  .album-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+  }
+
+  body.dark-mode .album-card {
+    background: var(--bg-secondary);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .album-card:hover {
+    transform: translateY(-15px) scale(1.02);
+    box-shadow: 0 20px 50px rgba(255, 107, 157, 0.4);
+  }
+
+  .album-cover {
+    width: 100%;
+    height: 280px;
+    background: linear-gradient(135deg, var(--color-peach) 0%, var(--color-lavender) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 100px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .album-cover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+    animation: shine 3s infinite;
+  }
+
+  @keyframes shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .album-info {
+    padding: 25px;
+  }
+
+  .album-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--color-primary);
+    margin-bottom: 10px;
+  }
+
+  .album-description {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin-bottom: 15px;
+    line-height: 1.6;
+  }
+
+  .album-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 2px solid var(--bg-secondary);
+  }
+
+  body.dark-mode .album-meta {
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .photo-count {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+
+  .view-album-btn {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    color: var(--text-light);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .view-album-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(255, 107, 157, 0.4);
+  }
+
+  /* Vista de fotos del álbum */
+  .photos-view {
+    display: none;
+  }
+
+  .photos-view.active {
+    display: block;
+    animation: fadeIn 0.5s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Dedicatoria */
+  .dedication-card {
+    background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(230, 179, 255, 0.1) 100%);
+    border: 3px solid var(--color-primary);
+    border-radius: 25px;
+    padding: 40px;
+    margin-bottom: 50px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+  }
+
+  body.dark-mode .dedication-card {
+    background: linear-gradient(135deg, rgba(255, 107, 157, 0.2) 0%, rgba(230, 179, 255, 0.2) 100%);
+  }
+
+  .dedication-card::before {
+    content: '"';
+    position: absolute;
+    top: -20px;
+    left: 20px;
+    font-size: 150px;
+    color: var(--color-primary);
+    opacity: 0.2;
+    font-family: Georgia, serif;
+  }
+
+  .dedication-title {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: bold;
+    color: var(--color-primary);
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .dedication-text {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    line-height: 1.9;
+    color: var(--text-primary);
+    font-style: italic;
+    position: relative;
+    z-index: 2;
+    text-align: justify;
+  }
+
+  .dedication-signature {
+    text-align: right;
+    margin-top: 25px;
+    font-weight: bold;
+    color: var(--color-secondary);
+    font-size: clamp(1rem, 2vw, 1.2rem);
+  }
+
+  /* Grid de fotos */
+  .photos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+  }
+
+  .photo-item {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    cursor: pointer;
+    aspect-ratio: 1;
+    background: var(--bg-secondary);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+  }
+
+  body.dark-mode .photo-item {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .photo-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(255, 107, 157, 0.3);
+    z-index: 10;
+  }
+
+  .photo-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-peach) 0%, var(--color-lavender) 100%);
+    font-size: 80px;
+  }
+
+  .photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .photo-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+    padding: 20px;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .photo-item:hover .photo-overlay {
+    transform: translateY(0);
+  }
+
+  .photo-caption {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  /* Modal de imagen */
+  .photo-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .photo-modal.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .modal-content {
+    max-width: 90%;
+    max-height: 90vh;
+    position: relative;
+  }
+
+  .modal-content img {
+    max-width: 100%;
+    max-height: 90vh;
+    border-radius: 10px;
+    box-shadow: 0 0 50px rgba(255, 107, 157, 0.5);
+    object-fit: contain;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: -50px;
+    right: 0;
+    background: var(--color-primary);
+    color: var(--text-light);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-close:hover {
+    transform: scale(1.1) rotate(90deg);
+    background: var(--color-secondary);
+  }
+
+  /* Decoraciones flotantes */
+  .floating-decoration {
+    position: fixed;
+    pointer-events: none;
+    animation: float 6s ease-in-out infinite;
+    opacity: 0.6;
+    z-index: 1;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(10deg); }
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .gallery-container {
+      padding: 50px 20px;
+    }
+
+    .albums-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .photos-grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .gallery-header {
+      padding: 90px 20px 50px;
+    }
+
+    .gallery-title {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+
+    .gallery-subtitle {
+      font-size: 1.2rem;
+    }
+
+    .gallery-container {
+      padding: 40px 16px;
+    }
+
+    .albums-grid {
+      grid-template-columns: 1fr;
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .photos-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .dedication-card {
+      padding: 25px 20px;
+      margin-bottom: 35px;
+    }
+
+    .dedication-title {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+
+    .dedication-text {
+      font-size: 1.1rem;
+      text-align: left;
+      line-height: 1.7;
+    }
+
+    .dedication-signature {
+      margin-top: 20px;
+      font-size: 1rem;
+    }
+
+    .back-button {
+      top: 90px;
+      left: 16px;
+      padding: 10px 18px;
+      font-size: 0.9rem;
+    }
+
+    .album-cover {
+      height: 240px;
+      font-size: 80px;
+    }
+
+    .album-info {
+      padding: 20px;
+    }
+
+    .album-title {
+      font-size: 1.6rem;
+    }
+
+    .album-description {
+      font-size: 0.95rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .gallery-header {
+      padding: 85px 16px 40px;
+    }
+
+    .gallery-title {
+      font-size: 2rem;
+    }
+
+    .gallery-subtitle {
+      font-size: 1rem;
+    }
+
+    .gallery-container {
+      padding: 30px 12px;
+    }
+
+    .albums-grid {
+      gap: 20px;
+      margin-top: 25px;
+    }
+
+    .photos-grid {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .dedication-card {
+      padding: 20px 16px;
+      margin-bottom: 30px;
+    }
+
+    .dedication-title {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+    }
+
+    .dedication-text {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .dedication-signature {
+      margin-top: 16px;
+      font-size: 0.95rem;
+    }
+
+    .back-button {
+      top: 85px;
+      left: 12px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+    }
+
+    .album-cover {
+      height: 200px;
+      font-size: 60px;
+    }
+
+    .album-info {
+      padding: 16px;
+    }
+
+    .album-title {
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+
+    .album-description {
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+
+    .view-album-btn {
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
+
+    .modal-content img {
+      max-height: 80vh;
+    }
+
+    .modal-close {
+      top: -40px;
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+  }
+</style>
+
+<script>
+  // Datos de ejemplo de los álbumes (Reemplaza con tus datos reales)
+  const albumsData = [
+    {
+      id: 1,
+      title: "Momentos Especiales",
+      description: "Recuerdos de celebraciones y momentos únicos que atesoramos",
+      icon: "🎉",
+      photoCount: 12,
+      dedication: {
+        title: "💝 Para la mejor mamá del mundo",
+        text: "Cada foto en este álbum guarda un pedacito de nuestra historia juntos. Son los momentos de risas, abrazos y celebraciones que nos recuerdan lo afortunados que somos de tenerte. Gracias por llenar nuestras vidas de amor y alegría.",
+        signature: "Con amor eterno, tu familia 💕"
+      },
+      photos: [
+        { id: 1, caption: "Cumpleaños 2023", placeholder: "🎂", image: "/images/gallery/celebration-1.jpg" },
+        { id: 2, caption: "Día de las Madres", placeholder: "🌹", image: "/images/gallery/celebration-2.jpg" },
+        { id: 3, caption: "Navidad en familia", placeholder: "🎄", image: "/images/gallery/celebration-3.jpg" },
+        { id: 4, caption: "Año nuevo", placeholder: "🎊", image: "/images/gallery/celebration-4.jpg" },
+        { id: 5, caption: "Aniversario", placeholder: "💐", image: "/images/gallery/celebration-5.jpg" },
+        { id: 6, caption: "Reunión familiar", placeholder: "👨‍👩‍👧‍👦", image: "/images/gallery/family-1.jpg" },
+        { id: 7, caption: "Graduación", placeholder: "🎓", image: "/images/gallery/celebration-6.jpg" },
+        { id: 8, caption: "Vacaciones", placeholder: "🏖️", image: "/images/gallery/adventure-1.jpg" },
+        { id: 9, caption: "Picnic", placeholder: "🧺", image: "/images/gallery/celebration-7.jpg" },
+        { id: 10, caption: "Cena especial", placeholder: "🍽️", image: "/images/gallery/celebration-8.jpg" },
+        { id: 11, caption: "Paseo en el parque", placeholder: "🌳", image: "/images/gallery/smiles-1.jpg" },
+        { id: 12, caption: "Tarde de películas", placeholder: "🎬", image: "/images/gallery/smiles-2.jpg" }
+      ]
+    },
+    {
+      id: 2,
+      title: "Viajes y Aventuras",
+      description: "Explorando el mundo a tu lado, creando memorias inolvidables",
+      icon: "✈️",
+      photoCount: 10,
+      dedication: {
+        title: "🌍 Nuestras aventuras juntos",
+        text: "Viajar contigo ha sido descubrir no solo nuevos lugares, sino también nuevas razones para amarte. Tu curiosidad, tu sonrisa al descubrir algo nuevo, tu manera de hacer que cada momento sea especial... Estos recuerdos son el tesoro más valioso que guardamos.",
+        signature: "Tus compañeros de aventuras 🗺️"
+      },
+      photos: [
+        { id: 1, caption: "Playa paradisíaca", placeholder: "🏝️", image: "/images/gallery/adventure-1.jpg" },
+        { id: 2, caption: "Montañas majestuosas", placeholder: "⛰️", image: "/images/gallery/adventure-2.jpg" },
+        { id: 3, caption: "Ciudad histórica", placeholder: "🏛️", image: "/images/gallery/adventure-3.jpg" },
+        { id: 4, caption: "Atardecer perfecto", placeholder: "🌅", image: "/images/gallery/adventure-4.jpg" },
+        { id: 5, caption: "Mercado local", placeholder: "🛍️", image: "/images/gallery/adventure-5.jpg" },
+        { id: 6, caption: "Restaurante típico", placeholder: "🍜", image: "/images/gallery/adventure-6.jpg" },
+        { id: 7, caption: "Museo fascinante", placeholder: "🖼️", image: "/images/gallery/adventure-7.jpg" },
+        { id: 8, caption: "Paseo en bote", placeholder: "⛵", image: "/images/gallery/adventure-8.jpg" },
+        { id: 9, caption: "Jardines hermosos", placeholder: "🌺", image: "/images/gallery/adventure-9.jpg" },
+        { id: 10, caption: "Mirador espectacular", placeholder: "📸", image: "/images/gallery/adventure-10.jpg" }
+      ]
+    },
+    {
+      id: 3,
+      title: "Momentos Cotidianos",
+      description: "La belleza está en los pequeños momentos del día a día",
+      icon: "☕",
+      photoCount: 15,
+      dedication: {
+        title: "💕 En las pequeñas cosas",
+        text: "No necesitamos grandes ocasiones para recordar lo especial que eres. Tu café de las mañanas, tus consejos sabios, tu forma de hacer que una tarde ordinaria se convierta en extraordinaria... Esos momentos cotidianos son los que más atesoramos porque son únicamente tuyos.",
+        signature: "Para siempre agradecidos 🏡"
+      },
+      photos: [
+        { id: 1, caption: "Desayuno juntos", placeholder: "🥐", image: "/images/gallery/smiles-1.jpg" },
+        { id: 2, caption: "Tarde de jardín", placeholder: "🌻", image: "/images/gallery/smiles-2.jpg" },
+        { id: 3, caption: "Cocinando juntos", placeholder: "👩‍🍳", image: "/images/gallery/smiles-3.jpg" },
+        { id: 4, caption: "Lectura compartida", placeholder: "📚", image: "/images/gallery/smiles-4.jpg" },
+        { id: 5, caption: "Juegos de mesa", placeholder: "🎲", image: "/images/gallery/smiles-5.jpg" },
+        { id: 6, caption: "Hora del té", placeholder: "🍵", image: "/images/gallery/smiles-6.jpg" },
+        { id: 7, caption: "Costura creativa", placeholder: "🧵", image: "/images/gallery/smiles-7.jpg" },
+        { id: 8, caption: "Cuidando plantas", placeholder: "🪴", image: "/images/gallery/smiles-8.jpg" },
+        { id: 9, caption: "Ejercicio matutino", placeholder: "🧘‍♀️", image: "/images/gallery/smiles-9.jpg" },
+        { id: 10, caption: "Noche de películas", placeholder: "📺", image: "/images/gallery/smiles-10.jpg" },
+        { id: 11, caption: "Horneando galletas", placeholder: "🍪", image: "/images/gallery/smiles-11.jpg" },
+        { id: 12, caption: "Paseo con mascotas", placeholder: "🐕", image: "/images/gallery/smiles-12.jpg" },
+        { id: 13, caption: "Arreglando flores", placeholder: "💐", image: "/images/gallery/smiles-13.jpg" },
+        { id: 14, caption: "Conversaciones nocturnas", placeholder: "🌙", image: "/images/gallery/smiles-14.jpg" },
+        { id: 15, caption: "Abrazos espontáneos", placeholder: "🤗", image: "/images/gallery/smiles-15.jpg" }
+      ]
+    },
+    {
+      id: 4,
+      title: "Generaciones de Amor",
+      description: "El legado de amor que compartes con todos nosotros",
+      icon: "👨‍👩‍👧‍👦",
+      photoCount: 8,
+      dedication: {
+        title: "🌳 Nuestras raíces",
+        text: "Eres el corazón de nuestra familia, el pilar que nos mantiene unidos. A través de ti, aprendimos el significado del amor incondicional, la fortaleza y la bondad. Estas fotos capturan el amor que fluye a través de las generaciones, todo gracias a ti.",
+        signature: "Tu legado de amor continúa 💖"
+      },
+      photos: [
+        { id: 1, caption: "Tres generaciones", placeholder: "👵👩👶", image: "/images/gallery/family-1.jpg" },
+        { id: 2, caption: "Abuela y nietos", placeholder: "👪", image: "/images/gallery/family-2.jpg" },
+        { id: 3, caption: "Tradiciones familiares", placeholder: "🎊", image: "/images/gallery/family-3.jpg" },
+        { id: 4, caption: "Historias compartidas", placeholder: "📖", image: "/images/gallery/family-4.jpg" },
+        { id: 5, caption: "Recetas heredadas", placeholder: "🥘", image: "/images/gallery/family-5.jpg" },
+        { id: 6, caption: "Álbum familiar", placeholder: "📔", image: "/images/gallery/family-6.jpg" },
+        { id: 7, caption: "Reunión completa", placeholder: "🏠", image: "/images/gallery/family-7.jpg" },
+        { id: 8, caption: "Amor multiplicado", placeholder: "💞", image: "/images/gallery/family-8.jpg" }
+      ]
+    }
+  ];
+
+  let currentAlbum: typeof albumsData[0] | null = null;
+
+  // Generar álbumes
+  function generateAlbums() {
+    const albumsGrid = document.getElementById('albumsGrid') as HTMLElement;
+    if (!albumsGrid) return;
+
+    albumsGrid.innerHTML = '';
+
+    albumsData.forEach(album => {
+      const albumCard = document.createElement('div');
+      albumCard.className = 'album-card';
+      albumCard.onclick = () => openAlbum(album.id);
+      
+      albumCard.innerHTML = `
+        <div class="album-cover">${album.icon}</div>
+        <div class="album-info">
+          <h3 class="album-title">${album.title}</h3>
+          <p class="album-description">${album.description}</p>
+          <div class="album-meta">
+            <div class="photo-count">
+              <span>📷</span>
+              <span>${album.photoCount} fotos</span>
+            </div>
+            <button class="view-album-btn">Ver álbum</button>
+          </div>
+        </div>
+      `;
+      
+      albumsGrid.appendChild(albumCard);
+    });
+  }
+
+  // Abrir álbum
+  function openAlbum(albumId: number) {
+    currentAlbum = albumsData.find(a => a.id === albumId) || null;
+    if (!currentAlbum) return;
+    
+    // Actualizar dedicatoria
+    const dedicationTitle = document.getElementById('dedicationTitle') as HTMLElement;
+    const dedicationText = document.getElementById('dedicationText') as HTMLElement;
+    const dedicationSignature = document.getElementById('dedicationSignature') as HTMLElement;
+
+    if (dedicationTitle) dedicationTitle.textContent = currentAlbum.dedication.title;
+    if (dedicationText) dedicationText.textContent = currentAlbum.dedication.text;
+    if (dedicationSignature) dedicationSignature.textContent = currentAlbum.dedication.signature;
+    
+    // Generar fotos
+    const photosGrid = document.getElementById('photosGrid') as HTMLElement;
+    if (!photosGrid) return;
+
+    photosGrid.innerHTML = '';
+    
+    currentAlbum.photos.forEach(photo => {
+      const photoItem = document.createElement('div');
+      photoItem.className = 'photo-item';
+      photoItem.onclick = () => openPhotoModal(photo);
+      
+      const img = document.createElement('img');
+      img.src = photo.image;
+      img.alt = photo.caption;
+      img.loading = 'lazy';
+      img.style.display = 'none';
+      
+      img.onload = function() {
+        (this as HTMLImageElement).style.display = 'block';
+        const placeholder = photoItem.querySelector('.photo-placeholder') as HTMLElement;
+        if (placeholder) placeholder.style.display = 'none';
+      };
+      
+      img.onerror = function() {
+        (this as HTMLImageElement).style.display = 'none';
+      };
+      
+      photoItem.innerHTML = `
+        <div class="photo-placeholder">${photo.placeholder}</div>
+        <div class="photo-overlay">
+          <div class="photo-caption">${photo.caption}</div>
+        </div>
+      `;
+      
+      photoItem.insertBefore(img, photoItem.firstChild);
+      photosGrid.appendChild(photoItem);
+    });
+    
+    // Cambiar vistas
+    const albumsView = document.getElementById('albumsView') as HTMLElement;
+    const photosView = document.getElementById('photosView') as HTMLElement;
+    const backBtn = document.getElementById('backBtn') as HTMLElement;
+
+    if (albumsView) albumsView.classList.add('hidden');
+    if (photosView) photosView.classList.add('active');
+    if (backBtn) backBtn.classList.add('show');
+    
+    // Scroll al inicio
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Volver a álbumes
+  function goBackToAlbums() {
+    const albumsView = document.getElementById('albumsView') as HTMLElement;
+    const photosView = document.getElementById('photosView') as HTMLElement;
+    const backBtn = document.getElementById('backBtn') as HTMLElement;
+
+    if (albumsView) albumsView.classList.remove('hidden');
+    if (photosView) photosView.classList.remove('active');
+    if (backBtn) backBtn.classList.remove('show');
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Abrir modal de foto
+  function openPhotoModal(photo: { caption: string; placeholder: string; image: string }) {
+    const modal = document.getElementById('photoModal') as HTMLElement;
+    const modalImage = document.getElementById('modalImage') as HTMLImageElement;
+    
+    if (!modal || !modalImage) return;
+
+    // Intentar cargar la imagen real, si no existe mostrar placeholder
+    modalImage.src = photo.image;
+    modalImage.alt = photo.caption;
+    modalImage.onerror = function() {
+      // Si la imagen no carga, mostrar SVG con el emoji
+      (this as HTMLImageElement).src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><rect fill="%23ff6b9d" width="400" height="400"/><text x="50%" y="50%" font-size="200" text-anchor="middle" dominant-baseline="central">${photo.placeholder}</text></svg>`;
+    };
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  // Cerrar modal
+  function closeModal() {
+    const modal = document.getElementById('photoModal') as HTMLElement;
+    if (modal) {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Inicializar
+  function initGallery() {
+    generateAlbums();
+
+    const backBtn = document.getElementById('backBtn') as HTMLElement;
+    if (backBtn) {
+      backBtn.addEventListener('click', goBackToAlbums);
+    }
+
+    const modal = document.getElementById('photoModal') as HTMLElement;
+    const modalClose = modal?.querySelector('.modal-close') as HTMLElement;
+    
+    if (modalClose) {
+      modalClose.addEventListener('click', closeModal);
+    }
+
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+    }
+
+    // Cerrar modal con tecla Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+  }
+
+  // Ejecutar cuando el DOM esté listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGallery);
+  } else {
+    initGallery();
+  }
+</script>
