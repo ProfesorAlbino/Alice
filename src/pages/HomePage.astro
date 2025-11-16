@@ -3,8 +3,8 @@
 import HeroSection from "../components/HeroSection.astro";
 ---
 
-<div class="p-0">
-  <section>
+<div class="p-0" style="width: 100%; margin: 0; padding: 0;">
+  <section style="width: 100%; margin: 0; padding: 0;">
     <!-- Animación de carga -->
     <div id="loading-animation">
       <div class="loading-content">
@@ -29,7 +29,7 @@ import HeroSection from "../components/HeroSection.astro";
     </div>
 
     <!-- Contenido principal -->
-    <div id="main-content" class="mt-5">
+    <div id="main-content">
       <HeroSection/>
     </div>
   </section>
@@ -325,19 +325,13 @@ import HeroSection from "../components/HeroSection.astro";
     opacity: 0;
     transition: opacity 1s ease-in;
     min-height: 100vh;
+    width: 100%;
+    margin: 0;
+    padding: 0;
   }
 
   #main-content.show {
     opacity: 1;
-  }
-
-  .content-card {
-    background: white;
-    border-radius: 20px;
-    padding: 40px;
-    box-shadow: var(--shadow-soft);
-    max-width: 800px;
-    margin: 0 auto;
   }
 
   body.dark-mode .content-card {
