@@ -1,0 +1,607 @@
+---
+// Hero Section Component
+---
+
+<section class="hero-section">
+  <!-- Imagen de fondo -->
+  <div class="hero-background">
+    <!-- Imagen de fondo -->
+    <img src="/images/family-photo.jpg" alt="Foto familiar" class="hero-bg-image">
+    
+    <!-- Placeholder que se muestra si la imagen no carga -->
+    <div class="image-placeholder" style="display: none;">
+      <div class="placeholder-icon">📷</div>
+      <div class="placeholder-text">Inserta tu foto de mamá aquí</div>
+    </div>
+  </div>
+  
+  <!-- Corazones flotantes -->
+  <div class="floating-hearts">
+    <!-- Se generarán dinámicamente con JavaScript -->
+  </div>
+  
+  <!-- Decoraciones de esquina -->
+  <div class="corner-decoration top-left">
+    <i class="fa-solid fa-heart"></i>
+  </div>
+  <div class="corner-decoration top-right">
+    <i class="fa-solid fa-star"></i>
+  </div>
+  <div class="corner-decoration bottom-left">
+    <i class="fa-solid fa-gift"></i>
+  </div>
+  <div class="corner-decoration bottom-right">
+    <i class="fa-solid fa-cake-candles"></i>
+  </div>
+  
+  <!-- Contenido principal del Hero -->
+  <div class="hero-content">
+    <h1 class="hero-title">¡Feliz Cumpleaños!</h1>
+    <h2 class="hero-subtitle">A la mejor mamá del mundo</h2>
+    <p class="hero-message">
+      En este día tan especial, queremos celebrar todo lo que eres: 
+      tu amor infinito, tu sonrisa que ilumina nuestros días, 
+      y cada sacrificio que has hecho por nosotros. 
+      Gracias por ser nuestro pilar, nuestra inspiración y nuestro hogar.
+    </p>
+    <button id="hero-scroll-btn" class="hero-btn">
+      <i class="fa-solid fa-gift"></i>
+      <span>Ver tu Regalo</span>
+    </button>
+  </div>
+</section>
+
+<style>
+  /* Hero Section */
+  .hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  /* Imagen de fondo con overlay */
+  .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .hero-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 107, 157, 0.7) 0%,
+      rgba(196, 69, 105, 0.6) 50%,
+      rgba(230, 179, 255, 0.7) 100%
+    );
+    z-index: 2;
+  }
+
+  body.dark-mode .hero-background::before {
+    background: linear-gradient(
+      135deg,
+      rgba(26, 26, 46, 0.85) 0%,
+      rgba(15, 15, 30, 0.8) 50%,
+      rgba(42, 26, 62, 0.85) 100%
+    );
+  }
+
+  .hero-background img,
+  .hero-bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+
+  /* Placeholder para la imagen */
+  .image-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--color-peach) 0%, var(--color-lavender) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  body.dark-mode .image-placeholder {
+    background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-secondary) 100%);
+  }
+
+  .placeholder-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .placeholder-text {
+    color: var(--text-light);
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .image-specs {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 25px 35px;
+    border-radius: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: var(--text-light);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+  }
+
+  .image-specs strong {
+    color: var(--color-gold);
+    font-size: 1.3rem;
+  }
+
+  @keyframes float {
+    0%, 100% { 
+      transform: translateY(0px); 
+    }
+    50% { 
+      transform: translateY(-15px); 
+    }
+  }
+
+  /* Contenido del Hero */
+  .hero-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    color: var(--text-light);
+    max-width: 900px;
+    padding: 40px 20px;
+  }
+
+  /* Decoración flotante de corazones */
+  .floating-hearts {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .heart-particle {
+    position: absolute;
+    font-size: 30px;
+    opacity: 0;
+    animation: floatHeart 8s infinite ease-in-out;
+  }
+
+  @keyframes floatHeart {
+    0% {
+      transform: translateY(100vh) rotate(0deg) scale(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.8;
+    }
+    90% {
+      opacity: 0.8;
+    }
+    100% {
+      transform: translateY(-100px) rotate(360deg) scale(1.2);
+      opacity: 0;
+    }
+  }
+
+  /* Título principal con efectos */
+  .hero-title {
+    font-size: 5rem;
+    font-weight: 900;
+    margin-bottom: 20px;
+    text-shadow: 
+      3px 3px 6px rgba(0, 0, 0, 0.5),
+      0 0 30px rgba(255, 215, 0, 0.5),
+      0 0 60px rgba(255, 215, 0, 0.3);
+    animation: titleGlow 3s ease-in-out infinite;
+    line-height: 1.2;
+  }
+
+  @keyframes titleGlow {
+    0%, 100% {
+      text-shadow: 
+        3px 3px 6px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(255, 215, 0, 0.5);
+    }
+    50% {
+      text-shadow: 
+        3px 3px 6px rgba(0, 0, 0, 0.5),
+        0 0 50px rgba(255, 215, 0, 0.8),
+        0 0 80px rgba(255, 215, 0, 0.5);
+    }
+  }
+
+  .hero-subtitle {
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    letter-spacing: 2px;
+  }
+
+  .hero-message {
+    font-size: 1.4rem;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 300;
+  }
+
+  /* Botón decorativo */
+  .hero-btn {
+    padding: 18px 50px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-accent) 100%);
+    border: none;
+    border-radius: 50px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 
+      0 10px 30px rgba(255, 215, 0, 0.4),
+      0 0 20px rgba(255, 215, 0, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hero-btn i {
+    font-size: 1.5rem;
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  .hero-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 
+      0 15px 40px rgba(255, 215, 0, 0.6),
+      0 0 40px rgba(255, 215, 0, 0.5);
+  }
+
+  .hero-btn:hover i {
+    animation: none;
+    transform: scale(1.2) rotate(15deg);
+  }
+
+  .hero-btn:active {
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  /* Decoración de esquinas */
+  .corner-decoration {
+    position: absolute;
+    z-index: 3;
+    font-size: 3rem;
+    opacity: 0.5;
+    animation: rotate 20s linear infinite;
+    pointer-events: none;
+    color: var(--color-gold);
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+    transition: all 0.3s ease;
+  }
+
+  .corner-decoration i {
+    display: block;
+    animation: floatIcon 3s ease-in-out infinite;
+  }
+
+  @keyframes floatIcon {
+    0%, 100% {
+      transform: translateY(0px) scale(1);
+    }
+    50% {
+      transform: translateY(-10px) scale(1.1);
+    }
+  }
+
+  .corner-decoration.top-left {
+    top: 30px;
+    left: 30px;
+    color: var(--color-primary);
+  }
+
+  .corner-decoration.top-right {
+    top: 30px;
+    right: 30px;
+    animation-direction: reverse;
+    color: var(--color-gold);
+  }
+
+  .corner-decoration.bottom-left {
+    bottom: 30px;
+    left: 30px;
+    animation-delay: -5s;
+    color: var(--color-rose);
+  }
+
+  .corner-decoration.bottom-right {
+    bottom: 30px;
+    right: 30px;
+    animation-direction: reverse;
+    animation-delay: -5s;
+    color: var(--color-lavender);
+  }
+
+  @keyframes rotate {
+    from { 
+      transform: rotate(0deg); 
+    }
+    to { 
+      transform: rotate(360deg); 
+    }
+  }
+
+  /* Efecto de partículas de luz */
+  .light-particle {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2;
+    animation: sparkle 3s ease-in-out infinite;
+  }
+
+  @keyframes sparkle {
+    0%, 100% {
+      opacity: 0;
+      transform: scale(0);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 992px) {
+    .hero-title {
+      font-size: 3.5rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 2rem;
+    }
+    
+    .hero-message {
+      font-size: 1.2rem;
+    }
+    
+    .corner-decoration {
+      font-size: 50px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.5rem;
+    }
+    
+    .hero-message {
+      font-size: 1rem;
+    }
+    
+    .hero-btn {
+      padding: 15px 35px;
+      font-size: 1.1rem;
+    }
+    
+    .corner-decoration {
+      font-size: 2rem;
+    }
+
+    .placeholder-icon {
+      font-size: 50px;
+    }
+
+    .placeholder-text {
+      font-size: 1.2rem;
+    }
+
+    .image-specs {
+      font-size: 0.9rem;
+      padding: 15px 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-title {
+      font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.2rem;
+    }
+    
+    .hero-message {
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<script>
+  // Manejar carga de imagen
+  function handleImageLoad() {
+    const heroImage = document.querySelector('.hero-bg-image') as HTMLImageElement;
+    const placeholder = document.querySelector('.image-placeholder') as HTMLElement;
+    
+    if (heroImage) {
+      heroImage.addEventListener('error', () => {
+        // Si la imagen no carga, mostrar el placeholder
+        if (placeholder) {
+          placeholder.style.display = 'flex';
+        }
+        if (heroImage) {
+          heroImage.style.display = 'none';
+        }
+      });
+      
+      heroImage.addEventListener('load', () => {
+        // Si la imagen carga correctamente, ocultar el placeholder
+        if (placeholder) {
+          placeholder.style.display = 'none';
+        }
+      });
+      
+      // Verificar si la imagen ya está cargada
+      if (heroImage.complete && heroImage.naturalHeight !== 0) {
+        if (placeholder) {
+          placeholder.style.display = 'none';
+        }
+      }
+    }
+  }
+
+  // Crear corazones flotantes
+  function createFloatingHearts() {
+    const container = document.querySelector('.floating-hearts') as HTMLElement;
+    if (!container) return;
+    
+    const heartIcons = [
+      '<i class="fa-solid fa-heart"></i>',
+      '<i class="fa-solid fa-heart-pulse"></i>',
+      '<i class="fa-solid fa-star"></i>',
+      '<i class="fa-solid fa-gift"></i>',
+      '<i class="fa-solid fa-cake-candles"></i>',
+      '<i class="fa-solid fa-sparkles"></i>'
+    ];
+    const heartCount = 15;
+    
+    for (let i = 0; i < heartCount; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart-particle';
+      heart.innerHTML = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+      (heart as HTMLElement).style.left = Math.random() * 100 + '%';
+      (heart as HTMLElement).style.animationDelay = Math.random() * 8 + 's';
+      (heart as HTMLElement).style.animationDuration = (Math.random() * 4 + 6) + 's';
+      (heart as HTMLElement).style.fontSize = (Math.random() * 15 + 20) + 'px';
+      (heart as HTMLElement).style.color = `hsl(${Math.random() * 60 + 320}, 70%, 60%)`; // Colores rosas y púrpuras
+      container.appendChild(heart);
+    }
+  }
+
+  // Crear partículas de luz
+  function createLightParticles() {
+    const heroSection = document.querySelector('.hero-section') as HTMLElement;
+    if (!heroSection) return;
+    
+    const particleCount = 30;
+    
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'light-particle';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.top = Math.random() * 100 + '%';
+      particle.style.width = (Math.random() * 4 + 2) + 'px';
+      particle.style.height = particle.style.width;
+      particle.style.animationDelay = Math.random() * 3 + 's';
+      particle.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      heroSection.appendChild(particle);
+    }
+  }
+
+  // Scroll suave a la siguiente sección
+  function scrollToNext() {
+    const nextSection = document.querySelector('#main-content')?.nextElementSibling;
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      // Si no hay siguiente sección, scroll al final de la página
+      window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+    }
+  }
+
+  // Inicializar cuando el DOM esté listo
+  function initHero() {
+    handleImageLoad();
+    createFloatingHearts();
+    createLightParticles();
+    
+    // Configurar el botón de scroll
+    const scrollBtn = document.getElementById('hero-scroll-btn');
+    if (scrollBtn) {
+      scrollBtn.addEventListener('click', scrollToNext);
+    }
+  }
+
+  // Ejecutar cuando el DOM esté listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHero);
+  } else {
+    initHero();
+  }
+
+  // También ejecutar cuando la ventana cargue completamente
+  window.addEventListener('load', () => {
+    if (document.querySelector('.floating-hearts')?.children.length === 0) {
+      initHero();
+    }
+  });
+
+  // Efecto parallax sutil en el scroll (opcional, puede desactivarse si causa problemas)
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const scrolled = window.pageYOffset;
+        const heroContent = document.querySelector('.hero-content') as HTMLElement;
+        if (heroContent && scrolled < window.innerHeight) {
+          heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
+          heroContent.style.opacity = Math.max(0, 1 - (scrolled / 800)).toString();
+        }
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+</script>
+

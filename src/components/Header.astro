@@ -4,9 +4,9 @@ import ButtonDarkMode from "./ButtonDarkMode.astro"
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <!-- Logo y nombre -->
-        <a class="navbar-brand d-flex align-items-center" href="#perfil">
-            <img src="/" alt="Jeykel Medrano" style="width: 60px; height: 65px;">
-            <span>Plantilla</span>
+        <a class="navbar-brand d-flex align-items-center" href="#inicio">
+            <div class="navbar-logo">💝</div>
+            <span>Feliz Cumpleaños</span>
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,31 +16,22 @@ import ButtonDarkMode from "./ButtonDarkMode.astro"
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="#perfil">Inicio</a>
+                    <a class="nav-link" href="#inicio">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#acerca">Sobre mí</a>
+                    <a class="nav-link" href="#galeria">Galería</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#proyectos">Proyectos</a>
+                    <a class="nav-link" href="#mensajes">Mensajes</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#contacto">Contacto</a>
+                    <a class="nav-link" href="#regalo">Regalo</a>
                 </li>
 
-                <li class="nav-item mt-1">
+                <li class="nav-item mt-1 ms-3">
                     <ButtonDarkMode />
                 </li>
             </ul>
-        </div>
-
-        <div class="social-icons d-none d-lg-block">
-            <a href="/"><i class="fab fa-github"></i></a>
-            <a href="/"><i class="fab fa-linkedin"></i></a>
-            <a href="/">
-                <i class="fa-solid fa-envelope"></i>
-              </a>
-              
         </div>
     </div>
 </nav>
@@ -48,71 +39,132 @@ import ButtonDarkMode from "./ButtonDarkMode.astro"
 <script>
     const navbar = document.querySelector('.navbar');
 
-    if(navbar!=null){
+    if(navbar != null){
         window.addEventListener('scroll', () => {
-        if (window.scrollY > 0) {
-
-            navbar.classList.add('navbar-scrolled');
-        } else {
-            // Elimina la clase cuando regrese al top
-            navbar.classList.remove('navbar-scrolled');
-        }
-    });
+            if (window.scrollY > 50) {
+                navbar.classList.add('navbar-scrolled');
+            } else {
+                navbar.classList.remove('navbar-scrolled');
+            }
+        });
     } 
 </script>
 
 <style>
-    .social-icons a {
-        color: var(--color-destacado);
-        margin-left: 15px;
-        text-decoration: none;
-        transition: color 0.3s ease;
-        
-    }
-    
-    .social-icons a:hover {
-        color: var(--color-texto-principal);
-    }
-
-    .navbar-brand img {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        margin-right: 1rem;
-    }
-
-    .navbar{
-        transition: background-color 0.3s ease;
-        background-color: var(--color-header);
-        font-size: var(--font-size-h1);
-        font-family: var(--font-primary);
+    .navbar {
+        transition: all 0.3s ease;
+        background-color: rgba(255, 240, 245, 0.95);
+        backdrop-filter: blur(10px);
         width: 100%;
         position: fixed;
-        z-index: 100;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 0.75rem 0;
+    }
+
+    body.dark-mode .navbar {
+        background-color: rgba(26, 26, 46, 0.95);
     }
 
     .navbar-scrolled {
-    background-color: var(--color-header-2);
-    transition: background-color 0.3s ease;
- }
-
-    li a {
-        color: var( --color-texto-principal);
+        background-color: rgba(255, 240, 245, 0.98);
+        box-shadow: 0 4px 20px rgba(255, 107, 157, 0.2);
     }
 
-    li a:hover {
-        color: var(--color-destacado);
+    body.dark-mode .navbar-scrolled {
+        background-color: rgba(15, 15, 30, 0.98);
+        box-shadow: 0 4px 20px rgba(255, 107, 157, 0.3);
     }
 
-    span {
+    .navbar-logo {
+        font-size: 2rem;
+        margin-right: 0.75rem;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+    }
+
+    .navbar-brand {
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        transition: transform 0.3s ease;
+    }
+
+    .navbar-brand:hover {
+        transform: scale(1.05);
+    }
+
+    .navbar-brand span {
         font-weight: bold;
-        font-size: var(--font-size-h1);
-        font-family: var(--font-primary);
-        color: var(--color-texto-principal);
+        font-size: 1.3rem;
+        color: var(--color-primary);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    button {
-        background-color: var(--color-destacado);
+    body.dark-mode .navbar-brand span {
+        color: var(--color-primary);
+    }
+
+    .nav-link {
+        color: var(--text-primary) !important;
+        font-weight: 500;
+        margin: 0 0.5rem;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--color-primary), var(--color-gold));
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+    }
+
+    .nav-link:hover {
+        color: var(--color-primary) !important;
+    }
+
+    .nav-link:hover::after {
+        width: 80%;
+    }
+
+    .navbar-toggler {
+        border: 2px solid var(--color-primary);
+        padding: 0.25rem 0.5rem;
+    }
+
+    .navbar-toggler:focus {
+        box-shadow: 0 0 0 0.25rem rgba(255, 107, 157, 0.25);
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 107, 157, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    @media (max-width: 991px) {
+        .navbar-collapse {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 107, 157, 0.2);
+        }
+
+        .nav-link {
+            padding: 0.5rem 0 !important;
+        }
     }
 </style>
   

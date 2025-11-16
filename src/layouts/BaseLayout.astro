@@ -12,7 +12,7 @@ import HomePage from "../pages/HomePage.astro";
 
     <meta property="og:description" content="Bienvenido a mi plantilla" />
     <meta property="og:image" content="https://" />
-    <meta property="og:title" content="Mi Plantilla Astro" />
+    <meta property="og:title" content="Feliz Cumpleaños" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://" />
 
@@ -59,8 +59,11 @@ import HomePage from "../pages/HomePage.astro";
   main {
     width: 100%;
     height: 100%;
-    overflow-x: hidden; /* Evita el scroll horizontal */
-    /* background-color: var(--color-fondo-principal); */
+    overflow-x: hidden;
+  }
+
+  main {
+    padding-top: 76px; /* Compensar el navbar fijo */
   }
 
   * {

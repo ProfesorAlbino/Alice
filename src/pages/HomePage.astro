@@ -1,26 +1,385 @@
 ---
-//Importaciones y js
+// Importaciones y configuración
+import HeroSection from "../components/HeroSection.astro";
 ---
 
-<div class="container container-fluid p-0">
+<div class="p-0">
   <section>
-    <h1 class="text-center">¡Hola! Bienvenido a mi <span id="nombre">Plantilla Astro</span></h1>
+    <!-- Animación de carga -->
+    <div id="loading-animation">
+      <div class="loading-content">
+        <!-- Corazón principal -->
+        <div class="heart-container">
+          <div class="main-heart"></div>
+        </div>
+        <!-- Texto principal -->
+        <div class="loading-text">Te Amamos Madre</div>
+        <div class="loading-subtext">Feliz Cumpleaños</div>
+
+        <!-- Flores decorativas -->
+        <div class="flower" style="top: 30%; left: 20%;"></div>
+        <div class="flower" style="top: 50%; right: 15%; animation-delay: -3s;">
+        </div>
+        <div
+          class="flower"
+          style="bottom: 25%; left: 25%; animation-delay: -6s;"
+        >
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenido principal -->
+    <div id="main-content" class="mt-5">
+      <HeroSection/>
+    </div>
   </section>
 </div>
 
-<style>
-  #nombre {
-    background: linear-gradient(
-      to right,
-      var(--color-texto-principal),
-      var(--color-destacado)
-    );
+<script>
+  // Variable para controlar si la animación ya se mostró
+  let animationShown = false;
+
+  // Crear partículas flotantes
+  function createParticles() {
+    const loadingAnimation = document.getElementById("loading-animation");
+    if (!loadingAnimation) return;
+
+    const particleCount = 20;
+
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement("div");
+      particle.className = "particle";
+      particle.style.left = Math.random() * 100 + "%";
+      particle.style.width = Math.random() * 10 + 5 + "px";
+      particle.style.height = particle.style.width;
+      particle.style.animationDelay = Math.random() * 4 + "s";
+      particle.style.animationDuration = Math.random() * 3 + 3 + "s";
+      loadingAnimation.appendChild(particle);
+    }
   }
 
-  .container {
-    display: flex;
+  // Función para ocultar la animación y mostrar el contenido
+  function hideLoadingAnimation() {
+    const loadingAnimation = document.getElementById("loading-animation");
+    const mainContent = document.getElementById("main-content");
+
+    if (!loadingAnimation || !mainContent) return;
+
+    setTimeout(() => {
+      loadingAnimation.classList.add("fade-out");
+      setTimeout(() => {
+        loadingAnimation.style.display = "none";
+        mainContent.classList.add("show");
+      }, 1000);
+    }, 4000); // La animación dura 4 segundos
+  }
+
+  // Toggle modo oscuro
+  function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
+  }
+
+  // Inicializar cuando el DOM esté listo
+  function init() {
+    if (animationShown) return;
+
+    createParticles();
+    hideLoadingAnimation();
+    animationShown = true;
+  }
+
+  // Ejecutar cuando el DOM esté listo
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    // El DOM ya está listo
+    init();
+  }
+
+  // También ejecutar cuando la ventana cargue completamente
+  window.addEventListener("load", () => {
+    if (!animationShown) {
+      init();
+    }
+  });
+
+  // Configurar el botón de modo oscuro
+  document.addEventListener("DOMContentLoaded", () => {
+    const darkModeToggle = document.getElementById("dark-mode-toggle");
+    if (darkModeToggle) {
+      darkModeToggle.addEventListener("click", toggleDarkMode);
+    }
+  });
+</script>
+
+<style>
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    overflow-x: hidden;
+  }
+
+  /* Animación de carga inicial */
+  #loading-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      var(--color-primary) 0%,
+      var(--color-secondary) 50%,
+      var(--color-lavender) 100%
+    );
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 1s ease-out;
+  }
+
+  #loading-animation.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .loading-content {
+    text-align: center;
+    z-index: 2;
+    width: 100%;
+    flex-direction: column;
+    margin-top: 15rem;
+  }
+
+  .heart-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 30px;
+    animation: float 3s ease-in-out infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  .main-heart {
+    width: 200px;
+    height: 200px;
+    background: var(--color-gold);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    transform-origin: center center;
+    animation: heartbeat 1.5s ease-in-out infinite;
+    box-shadow: var(--shadow-glow);
+  }
+
+  .main-heart::before,
+  .main-heart::after {
+    content: "";
+    width: 200px;
+    height: 200px;
+    background: var(--color-gold);
+    border-radius: 50%;
+    position: absolute;
+  }
+
+  .main-heart::before {
+    top: -100px;
+    left: 0;
+  }
+
+  .main-heart::after {
+    left: 100px;
+    top: 0;
+  }
+
+  @keyframes heartbeat {
+    0%,
+    100% {
+      transform: translate(-50%, -50%) rotate(-45deg) scale(1);
+    }
+    25% {
+      transform: translate(-50%, -50%) rotate(-45deg) scale(1.1);
+    }
+    50% {
+      transform: translate(-50%, -50%) rotate(-45deg) scale(1);
+    }
+    75% {
+      transform: translate(-50%, -50%) rotate(-45deg) scale(1.05);
+    }
+  }
+
+  .loading-text {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: var(--text-light);
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+    animation: textGlow 2s ease-in-out infinite;
+    text-align: center;
+    width: 100%;
+  }
+
+  @keyframes textGlow {
+    0%,
+    100% {
+      text-shadow:
+        3px 3px 6px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(255, 215, 0, 0.5);
+    }
+    50% {
+      text-shadow:
+        3px 3px 6px rgba(0, 0, 0, 0.3),
+        0 0 40px rgba(255, 215, 0, 0.9),
+        0 0 60px rgba(255, 215, 0, 0.7);
+    }
+  }
+
+  .loading-subtext {
+    font-size: 1.5rem;
+    color: var(--text-light);
+    font-weight: 300;
+    letter-spacing: 3px;
+    animation: fadeInOut 2s ease-in-out infinite;
+    text-align: center;
+    width: 100%;
+  }
+
+  @keyframes fadeInOut {
+    0%,
+    100% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  /* Partículas flotantes */
+  .particle {
+    position: absolute;
+    background: var(--color-gold);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    animation: particleFloat 4s ease-in-out infinite;
+  }
+
+  @keyframes particleFloat {
+    0% {
+      transform: translateY(100vh) scale(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100px) scale(1);
+      opacity: 0;
+    }
+  }
+
+  /* Flores decorativas */
+  .flower {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    animation: flowerSpin 10s linear infinite;
+  }
+
+  .flower::before,
+  .flower::after {
+    content: "🌸";
+    font-size: 40px;
+    position: absolute;
+  }
+
+  @keyframes flowerSpin {
+    0% {
+      transform: rotate(0deg) translateX(150px) rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg) translateX(150px) rotate(-360deg);
+    }
+  }
+
+  /* Contenido principal (oculto inicialmente) */
+  #main-content {
+    opacity: 0;
+    transition: opacity 1s ease-in;
+    min-height: 100vh;
+  }
+
+  #main-content.show {
+    opacity: 1;
+  }
+
+  .content-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: var(--shadow-soft);
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  body.dark-mode .content-card {
+    background: var(--bg-secondary);
+  }
+
+  .celebration-title {
+    font-size: 2.5rem;
+    color: var(--color-primary);
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: bold;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .loading-text {
+      font-size: 2rem;
+    }
+
+    .loading-subtext {
+      font-size: 1rem;
+    }
+
+    .heart-container {
+      width: 150px;
+      height: 150px;
+    }
+
+    .main-heart,
+    .main-heart::before,
+    .main-heart::after {
+      width: 150px;
+      height: 150px;
+    }
+
+    .main-heart::before {
+      top: -75px;
+    }
+
+    .main-heart::after {
+      left: 75px;
+    }
   }
 </style>
